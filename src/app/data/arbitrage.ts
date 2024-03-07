@@ -39,6 +39,11 @@ export enum ArbitrageResult {
   NoArbitrage = "No arbitrage opportunity",
 }
 
+export type ArbitrageOpportunity = {
+  best_price_home_odd: number;
+  best_price_away_odd: number;
+  arb_percent: number;
+}
 /**
  * As my knowledge in betting is not very good, I'm not sure if this function is correct.
  * This is the conversation I had with ChatGPT about this function:
@@ -47,9 +52,11 @@ export enum ArbitrageResult {
  * @param arb
  * @returns
  */
-export function arbitrageOpportunity(arb: Arbitrage): ArbitrageResult {
+export function arbitrageOpportunity(arb: ArbitrageOpportunity): ArbitrageResult {
   const impliedProbHome = (arb.best_price_home_odd > 0) ? 100 / (arb.best_price_home_odd + 100) : -arb.best_price_home_odd / (-arb.best_price_home_odd + 100);
+  console.log('🚀 => arbitrageOpportunity => impliedProbHome:', impliedProbHome)
   const impliedProbAway = (arb.best_price_away_odd > 0) ? 100 / (arb.best_price_away_odd + 100) : -arb.best_price_away_odd / (-arb.best_price_away_odd + 100);
+  console.log('🚀 => arbitrageOpportunity => impliedProbAway:', impliedProbAway)
 
   // Check if arbitrage opportunity exists
   if (impliedProbHome + impliedProbAway < 1) {
